@@ -1,7 +1,7 @@
-import $ from "jquery";
-import axios from "axios";
+const $ = require("jquery");
+const axios = require("axios");
 
-export const dadjoke = ({ trigger, target }) => {
+const dadjoke = ({ trigger, target }) => {
   $(trigger).on("click", (_e) => {
     axios
       .get("https://icanhazdadjoke.com/", {
@@ -12,3 +12,5 @@ export const dadjoke = ({ trigger, target }) => {
       });
   });
 };
+
+module.exports = { dadjoke };
