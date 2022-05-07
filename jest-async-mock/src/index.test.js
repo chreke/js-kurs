@@ -15,14 +15,15 @@ beforeEach(() => {
   `;
 });
 
-test("fetch a random dad joke", () => {
+test("fetch a random dad joke", async () => {
   const joke = `Did you hear about the restaurant on the moon?
     Great food, no atmosphere!`;
-  axios.get.mockImplementation(() => ({
-    then: (cb) => cb({ data: joke }),
-  }));
+  const getMock = axios.get.mockResolvedValue({ data: joke });
   dadjoke({ trigger: "button", target: "#target" });
   $("button").trigger("click");
   expect(axios.get).toBeCalled();
+  // NB: The mocked call is still async, so we have to await the promise here
+  // to give the success callback time to run
+  await getMock();
   expect($("#target").html()).toBe(joke);
 });
