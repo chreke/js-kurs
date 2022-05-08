@@ -21,3 +21,29 @@ test.describe("Search", () => {
     await expect(page).toHaveURL(/lediga_lokaler\/stockholm\/bromma/);
   });
 });
+
+test.describe("Logged in", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("https://objektvision.se/");
+    await page.locator(".login-link.nav-link").first().click();
+    await page.locator("#Username").fill("ekeroth.christoffer@gmail.com");
+    await page.locator("#Password").fill("supersecret123");
+    await page.locator('#login-form-holder button[type="submit"]').click();
+  });
+
+  test("Watch for search results", async ({ page }) => {
+    await page.goto("https://objektvision.se/lediga_lokaler/stockholm/bromma");
+    await page.locator("text=Bevaka sökning").click();
+    await page.locator("text=Spara sökning").click();
+    await expect(page.locator("text=Bevakad sökning")).toBeVisible();
+  });
+
+  test.afterEach(async ({ page }) => {
+    await page.goto("https://objektvision.se/bevakningar");
+    let watchCount = (await page.$$(".icon-trash")).length;
+    while (watchCount) {
+      await page.locator(".icon-trash").click();
+      watchCount--;
+    }
+  });
+});
