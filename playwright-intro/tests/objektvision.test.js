@@ -1,5 +1,7 @@
 const { test, expect } = require("@playwright/test");
 
+// NOTE: Uncomment these lines to run in "headed" mode
+// test.use({ launchOptions: { headless: false, slowMo: 100 } });
 
 const BASE_URL = "https://objektvision.se";
 
